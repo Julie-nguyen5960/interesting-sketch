@@ -1,25 +1,42 @@
-document.body.style.margin   = 0
-document.body.style.overflow = `hidden`
+import p5 from "https://cdn.jsdelivr.net/npm/p5@1.11.3/+esm";
 
-const cnv = document.getElementById (`cnv_element`)
-cnv.width = innerWidth
-cnv.height = innerHeight
+// Inject CSS to eliminate white bar and scroll
+const style = document.createElement("style");
+style.innerHTML = `
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+  }
+  canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+`;
 
-const ctx = cnv.getContext (`2d`)
+//variables
+let thickness = 100;
 
-const draw_frame = ms => {
-   const t = ms / 1000
-   console.log (`page loaded ${ t.toFixed (2)}s ago`)
+document.head.appendChild(style);
 
-   ctx.fillStyle = `turquoise`
-   ctx.fillRect (0, 0, innerWidth, innerHeight)
+const sketch = (p) => {
+  p.setup = () => {
+    p.createCanvas(p.windowWidth, p.windowHeight);
+    p.textAlign(p.CENTER, p.CENTER);
+  };
 
-   requestAnimationFrame (draw_frame)
-}
+  p.draw = () => {
+    p.background (135, 206, 235);
+    p.rect (0, p.height - thickness, p.width, thickness );
+    p.fill (255, 200, 100)
+  };
 
-requestAnimationFrame (draw_frame)
+  p.windowResized = () => {
+    p.resizeCanvas(p.windowWidth, p.windowHeight);
+  };
+};
 
-onresize = () => {
-   cnv.width = innerWidth
-   cnv.height = innerHeight   
-}
+new p5(sketch);
